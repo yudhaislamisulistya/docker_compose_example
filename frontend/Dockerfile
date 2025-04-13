@@ -13,8 +13,14 @@ RUN npm install
 # Salin seluruh kode aplikasi
 COPY . .
 
+# Set variabel lingkungan untuk Next.js (jika diperlukan)
+ENV NEXT_PUBLIC_API_URL=http://backend:1323
+
 # Build aplikasi Next.js
 RUN npm run build
+
+# Expose port yang digunakan oleh Next.js
+EXPOSE 3000
 
 # Jalankan aplikasi Next.js
 CMD ["npm", "start"]
