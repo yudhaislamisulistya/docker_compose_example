@@ -21,7 +21,7 @@ func main() {
 
 	// Aktifkan middleware CORS
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:3000"},                                            // Allow frontend
+		AllowOrigins: []string{"http://202.43.249.105:3000/"},                                      // Allow frontend
 		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete}, // Allowed HTTP methods
 		AllowHeaders: []string{echo.HeaderContentType, echo.HeaderAuthorization},                   // Allowed headers
 	}))
