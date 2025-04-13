@@ -1,5 +1,5 @@
 # Gunakan image Golang sebagai base
-FROM golang:1.23-alpine
+FROM golang:1.18-alpine
 
 # Set working directory di dalam container
 WORKDIR /app
@@ -13,6 +13,8 @@ COPY . .
 
 # Build aplikasi
 RUN go build -o main .
+
+EXPOSE 1323
 
 # Tentukan perintah untuk menjalankan aplikasi
 CMD ["./main"]
