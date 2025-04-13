@@ -14,7 +14,8 @@ RUN npm install
 COPY . .
 
 # Set variabel lingkungan untuk Next.js (jika diperlukan)
-ENV NEXT_PUBLIC_API_URL=http://backend:1323
+ARG NEXT_PUBLIC_API_URL 
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 # Build aplikasi Next.js
 RUN npm run build
