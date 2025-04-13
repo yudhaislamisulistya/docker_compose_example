@@ -10,7 +10,7 @@ export function Hello() {
     // Fungsi untuk mengambil data dari API
     const fetchStudents = async () => {
       try {
-        const response = await fetch("http://localhost:1323/students");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
