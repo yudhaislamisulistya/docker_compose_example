@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 export function Hello() {
   // State untuk menyimpan data
@@ -10,21 +10,20 @@ export function Hello() {
     // Fungsi untuk mengambil data dari API
     const fetchStudents = async () => {
       try {
-        const response = await fetch('http://localhost:1323/students');
-        console.log(response);
+        const response = await fetch("http://localhost:1323/students");
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        setStudents(data);  // Set data yang diterima ke state
+        setStudents(data); // Set data yang diterima ke state
       } catch (error) {
-        setError(error.message);  // Tangani error
+        setError(error.message); // Tangani error
       } finally {
-        setLoading(false);  // Set loading selesai
+        setLoading(false); // Set loading selesai
       }
     };
 
-    fetchStudents();
+    fetchStudents().catch(console.error); // Tangani promise rejection
   }, []); // Hanya dijalankan sekali ketika komponen pertama kali dimounting
 
   // Jika loading, tampilkan pesan loading
