@@ -3,49 +3,51 @@ version: '3.8'
 services:
   # Service untuk MySQL
   db:
-    image: mysql:8.0 # Menggunakan MySQL versi 8.0
+    image: mysql:8.0 # Menggunakan image MySQL versi 8.0
     environment:
-      MYSQL_ROOT_PASSWORD: example # Password root untuk MySQL
-      MYSQL_DATABASE: my_database # Nama database yang ingin dibuat
+      MYSQL_ROOT_PASSWORD: Telkom123! # Password untuk root
+      MYSQL_DATABASE: academic # Database yang akan dibuat
     ports:
-      - "3306:3306" # Menyambungkan port lokal 3306 ke port 3306 di dalam container
+      - "3306:3306" # Port untuk MySQL
     volumes:
-      - db_data:/var/lib/mysql # Menyimpan data MySQL di volume agar persisten
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql # Menjalankan skrip SQL saat pertama kali container dibangun
+      - db_data:/var/lib/mysql # Volume untuk menyimpan data MySQL
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql # File SQL untuk inisialisasi database
     networks:
-      - app_network
+      - app_network # Menggunakan jaringan yang sama dengan service lain
 
   # Service untuk Backend Golang
   backend:
-    build: ./backend # Path ke folder backend Golang, pastikan sudah ada Dockerfile di folder ini
+    build: ./backend # Menggunakan Dockerfile di direktori backend
     ports:
-      - "1323:1323" # Menyambungkan port lokal 1323 ke port 1323 di dalam container
+      - "1323:1323" # Port untuk backend
     environment:
-      DB_HOST: db # Nama service MySQL dalam Docker Compose
-      DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: example
-      DB_NAME: my_database
+      DB_HOST: db # Hostname untuk MySQL
+      DB_PORT: 3306 # Port untuk MySQL
+      DB_USER: root # User untuk MySQL
+      DB_PASSWORD: Telkom123! # Password untuk MySQL
+      DB_NAME: academic # Nama database
     depends_on:
-      - db # Pastikan Golang menunggu MySQL siap sebelum menjalankan
+      - db
+    command: sh -c "until nc -z db 3306; do echo 'Waiting for MySQL...'; sleep 2; done && ./main" # Menunggu MySQL siap sebelum menjalankan aplikasi
     networks:
       - app_network
 
   # Service untuk Frontend Next.js
   frontend:
-    build: ./frontend # Path ke folder frontend Next.js, pastikan sudah ada Dockerfile di folder ini
+    build:
+      context: ./frontend # Menggunakan Dockerfile di direktori frontend
+      args:
+        NEXT_PUBLIC_API_URL: "http://202.43.249.105:1323"  # Argumen untuk build
     ports:
-      - "3000:3000" # Menyambungkan port lokal 3000 ke port 3000 di dalam container
-    environment:
-      NEXT_PUBLIC_API_URL: http://backend:1323 # URL untuk API backend Golang
+      - "3000:3000" # Port untuk frontend
     depends_on:
-      - backend # Pastikan frontend menunggu backend siap sebelum menjalankan
+      - backend # Menunggu backend siap sebelum menjalankan frontend
     networks:
       - app_network
 
 networks:
   app_network:
-    driver: bridge
+    driver: bridge # Jaringan bridge untuk komunikasi antar service
 
 volumes:
-  db_data:
+  db_data: # Volume untuk menyimpan data MySQL
